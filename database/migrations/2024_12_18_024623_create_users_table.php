@@ -17,8 +17,12 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('phone_number')->unique();
             $table->string('email')->unique();
-            $table->uuid('department_id')->references('uuid')->on('department')->onDelete(null);
+            $table->string('password');
+            $table->uuid('department_id')->nullable();
+            $table->foreign('department_id')->references('uuid')->on('department')->onDelete('set null');
+            $table->enum('role', ['administrator', 'superuser', 'manager', 'applicant'])->default('applicant');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

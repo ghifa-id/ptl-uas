@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('department', function (Blueprint $table) {
-            $table->uuid('uuid');
-            $table->string('code')->nullable();
+            $table->uuid('uuid')->primary();
+            $table->string('code')->unique();
             $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

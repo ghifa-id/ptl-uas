@@ -12,15 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vehicle', function (Blueprint $table) {
-            $table->uuid('uuid');
-            $table->uuid('type_id')->references('uuid')->on('type_vehicle')->onDelete(null);
+            $table->uuid('uuid')->primary();
+            $table->uuid('type_id')->nullable();
+            $table->foreign('type_id')->references('uuid')->on('type_vehicle')->onDelete('set null');
             $table->string('plat_number')->unique();
             $table->string('merk');
-            $table->boolean('status');
-            $table->uuid('created_by')->references('uuid')->on('users')->onDelete(null);
-            $table->uuid('updated_by')->references('uuid')->on('users')->onDelete(null);
-            $table->timestamps('deleted_at');
+            $table->boolean('status')->default(true);
+            $table->uuid('created_by')->nullable();
+            $table->foreign('created_by')->references('uuid')->on('users')->onDelete('set null');
+            $table->uuid('updated_by')->nullable();
+            $table->foreign('updated_by')->references('uuid')->on('users')->onDelete('set null');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

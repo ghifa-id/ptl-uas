@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('log_activity', function (Blueprint $table) {
             $table->id();
-            $table->uuid('user_id')->references('uuid')->on('users')->onDelete(null);
-            $table->string('act_on')->nullable();
-            $table->string('activity')->nullable();
+            $table->uuid('user_id')->nullable();
+            $table->foreign('user_id')->references('uuid')->on('users')->onDelete('set null');
+            $table->string('act_on');
+            $table->string('activity');
             $table->string('detail')->nullable();
             $table->timestamps();
             $table->softDeletes();
