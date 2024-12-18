@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('type');
             $table->text('message');
-            $table->text('trace');
-            $table->string('file');
-            $table->integer('line');
-            $table->json('context');
+            $table->text('trace')->nullable();
+            $table->string('file')->nullable();
+            $table->integer('line')->nullable();
+            $table->json('context')->nullable();
             $table->timestamps();
         });
     }
