@@ -15,11 +15,11 @@ return new class extends Migration
             $table->uuid('uuid')->primary();
             $table->uuid('application_id')->nullable();
             $table->foreign('application_id')->references('uuid')->on('vehicle_application')->onDelete('set null');
-            $table->datetime('return_at');
+            $table->dateTime('return_at');
             $table->integer('fuel_used');
             $table->string('photo_receipt');
-            $table->string('receipt_amount');
-            $table->status('status_return');
+            $table->integer('receipt_amount');
+            $table->enum('status', ['req_claim', 'claimed', 'refused'])->default('req_claim');
             $table->timestamps();
             $table->softDeletes();
         });
