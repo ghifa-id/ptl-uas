@@ -5,7 +5,3 @@
 @import "customize/administrator.css";
 @import "customize/manager.css";
 @import "customize/applicant.css";
-
-[x-cloak] {
-    display: none;
-}
