@@ -21,6 +21,7 @@ return new class extends Migration
             $table->uuid('department_id')->nullable();
             $table->foreign('department_id')->references('uuid')->on('department')->onDelete('set null');
             $table->enum('role', ['administrator', 'superuser', 'manager', 'applicant'])->default('applicant');
+            $table->enum('status', ['set_password', 'active', 'inactive'])->default('set_password');
             $table->timestamps();
             $table->softDeletes();
         });

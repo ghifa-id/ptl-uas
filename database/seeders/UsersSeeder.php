@@ -21,6 +21,7 @@ class UsersSeeder extends Seeder
                 'department_id' => null,
                 'password' => bcrypt('administrator123'),
                 'role' => 'administrator',
+                'status' => 'active',
             ],
             [
                 'name' => 'Manager',
@@ -30,6 +31,7 @@ class UsersSeeder extends Seeder
                 'department_id' => null,
                 'password' => bcrypt('manager123'),
                 'role' => 'manager',
+                'status' => 'active',
             ],
             [
                 'name' => 'Applicant',
@@ -39,6 +41,7 @@ class UsersSeeder extends Seeder
                 'department_id' => null,
                 'password' => bcrypt('applicant123'),
                 'role' => 'applicant',
+                'status' => 'active',
             ],
         ];
 
