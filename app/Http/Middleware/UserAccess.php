@@ -16,6 +16,6 @@ class UserAccess
             return $next($request);
         }
 
-        return redirect()->route($role . '.dashboard')->with(['error' => 'Kamu tidak memiliki izin untuk mengakses halaman ini.']);
+        return redirect()->route($role . '.dashboard')->withErrors(['warning' => 'Kamu tidak memiliki izin akses kesana!']);
     }
 }

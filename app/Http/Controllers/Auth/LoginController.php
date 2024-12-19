@@ -26,13 +26,6 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/dashboard';
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -41,15 +34,6 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         // $this->middleware('auth')->only('logout');
-    }
-
-    public function index()
-    {
-        if (Auth::check()) {
-            return redirect()->route(Auth::user()->role . '.dashboard');
-        } else {
-            return view('auth.login');
-        }
     }
 
     public function login(Request $request): RedirectResponse
