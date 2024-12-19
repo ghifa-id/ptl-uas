@@ -10,7 +10,7 @@
                 <div class="flex flex-col">
                     <input id="login" type="text"
                         class="p-4 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full text-xl @error('login') border-red-500 shadow-red-500 @enderror"
-                        name="login" value="{{ old('login') }}" placeholder="Nama pengguna / E-mail" required>
+                        name="login" value="{{ old('login') }}" placeholder="E-mail / Nama Pengguna" required>
                 </div>
             </div>
             <div class="flex flex-col mb-3">
