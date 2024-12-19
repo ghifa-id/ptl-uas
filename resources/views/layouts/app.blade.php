@@ -17,30 +17,31 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet"
         type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.0/css/font-awesome.min.css" rel="stylesheet"
         type="text/css" />
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+        integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 </head>
 
 <body>
     <div id="app">
         <nav
-            class="flex-no-wrap relative flex w-full items-center justify-between py-2 shadow-dark-mild bg-gray-800 lg:flex-wrap lg:justify-start lg:py-3">
+            class="flex-no-wrap fixed flex w-full items-center justify-between py-2 shadow-dark-mild bg-gray-800 lg:flex-wrap lg:justify-start lg:py-3 min-h-[70px]">
             <div class="container mx-auto px-2 md:px-0">
-                <div class="flex items-start">
+                <div class="flex items-start my-2 md:my-0">
                     <div class="flex w-full flex-wrap items-center justify-between">
                         <div class="flex">
                             <a class="mr-3 flex items-center text-neutral-200 hover:text-neutral-400 focus:text-neutral-400 lg:mb-0 lg:mt-0"
-                                href="#">
+                                href="{{ route(Auth::user()->role . '.dashboard') }}">
                                 <img src="{{ asset('img/logo.png') }}" class="w-11" alt="TE Logo" loading="lazy" />
                             </a>
-                            <button
+                            <button id="hamburger"
                                 class="block border-0 bg-transparent px-2 text-black/50 hover:no-underline hover:shadow-none focus:no-underline focus:shadow-none focus:outline-none focus:ring-0 text-neutral-200 lg:hidden"
-                                type="button" data-twe-collapse-init data-twe-target="#navbarSupportedContent1"
-                                aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
+                                type="button" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="[&>svg]:w-7 [&>svg]:stroke-white">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                         <path fill-rule="evenodd"
@@ -50,22 +51,31 @@
                                 </span>
                             </button>
                         </div>
-    
-                        <div class="!visible hidden flex-grow basis-[100%] items-center lg:!flex lg:basis-auto pt-4 md:pt-0"
-                            id="navbarSupportedContent1" data-twe-collapse-item>
-    
-                            <ul class="list-style-none me-auto flex flex-col ps-0 lg:flex-row" data-twe-navbar-nav-ref>
-                                <li class="mb-4 lg:mb-0 lg:pe-2" data-twe-nav-item-ref>
+
+                        <div class="!visible hidden min-h-[calc(100vh-60px)] md:min-h-0 flex-grow basis-[100%] items-center lg:!flex lg:basis-auto pt-4 md:pt-0"
+                            id="navbarMenu">
+                            <ul
+                                class="list-style-none me-auto flex flex-col items-center ps-0 lg:flex-row absolute md:relative right-0 left-0 m-auto bottom-0 top-0 h-fit">
+                                <li class="mb-4 lg:mb-0 lg:pe-2">
                                     <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
-                                        href="#" data-twe-nav-link-ref>Dashboard</a>
+                                        href="{{ route(Auth::user()->role . '.dashboard') }}">Dashboard</a>
                                 </li>
-                                <li class="mb-4 lg:mb-0 lg:pe-2" data-twe-nav-item-ref>
+                                <li class="mb-4 lg:mb-0 lg:pe-2 relative" data-twe-dropdown-ref
+                                    data-twe-dropdown-alignment="start">
                                     <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
-                                        href="#" data-twe-nav-link-ref>Team</a>
-                                </li>
-                                <li class="mb-4 lg:mb-0 lg:pe-2" data-twe-nav-item-ref>
-                                    <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
-                                        href="#" data-twe-nav-link-ref>Projects</a>
+                                        id="dropdownMenu1" role="button" data-twe-dropdown-toggle-ref
+                                        aria-expanded="false" href="#">Dropdown</a>
+                                    <ul class="absolute z-[1000] float-left !top-4 m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg data-[twe-dropdown-show]:block bg-surface-dark"
+                                        aria-labelledby="dropdownMenu1" data-twe-dropdown-menu-ref>
+                                        <li>
+                                            <a class="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline"
+                                                href="#" data-twe-dropdown-item-ref>Menu 1</a>
+                                        </li>
+                                        <li>
+                                            <a class="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline bg-surface-dark"
+                                                href="#" data-twe-dropdown-item-ref>Menu 2</a>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
                         </div>
@@ -73,14 +83,16 @@
                     <div class="relative flex items-center mt-[2px] md:mt-0">
                         <div class="relative" data-twe-dropdown-ref data-twe-dropdown-alignment="end">
                             <a class="flex items-center whitespace-nowrap transition duration-150 ease-in-out motion-reduce:transition-none"
-                                href="#" id="dropdownMenuButton2" role="button" data-twe-dropdown-toggle-ref
+                                href="#" id="dropdownMenuButton1" role="button" data-twe-dropdown-toggle-ref
                                 aria-expanded="false">
-                                <img src="{{ asset('img/avatar.png') }}" class="rounded-full w-11" alt="" loading="lazy" />
+                                <img src="{{ asset('img/avatar.png') }}" class="rounded-full w-11" alt=""
+                                    loading="lazy" />
                             </a>
                             <ul class="absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg data-[twe-dropdown-show]:block bg-surface-dark"
-                                aria-labelledby="dropdownMenuButton2" data-twe-dropdown-menu-ref>
+                                aria-labelledby="dropdownMenuButton1" data-twe-dropdown-menu-ref>
                                 <li>
-                                    <span class="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline border-b border-b-slate-500"
+                                    <span
+                                        class="block w-full whitespace-nowrap cursor-default bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline border-b border-b-slate-500"
                                         data-twe-dropdown-item-ref>{{ Auth::user()->name }}</span>
                                 </li>
                                 <li>
@@ -107,25 +119,13 @@
                 </div>
             </div>
         </nav>
-        <main class="container mx-auto">
+        <main class="container mx-auto pt-20">
             @yield('content')
         </main>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        // Initialization for ES Users
-        import {
-            Collapse,
-            Dropdown,
-            initTWE,
-        } from "tw-elements";
-
-        initTWE({
-            Collapse,
-            Dropdown
-        });
-    </script>
+    <script src="{{ asset('js/style.js') }}"></script>
 </body>
 
 </html>
