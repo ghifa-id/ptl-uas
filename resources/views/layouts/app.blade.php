@@ -8,8 +8,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Welcome {{ Auth::user()->role }}</title>
-
+    <title>@yield('title') | e-DinasDrive</title>
+    <link href="{{ asset('img/logo.png') }}" rel="icon">
+    <link href="{{ asset('img/logo.png') }}" rel="apple-touch-icon">
+    
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
@@ -125,7 +127,9 @@
         </nav>
         <main class="container mx-auto pt-20 px-2 md:px-0">
             @error('warning')
-                <div id="warning-alert" class="bg-yellow-200 border border-yellow-500 truncate text-sm text-left py-4 px-4 text-nowrap md:mx-0 mt-1 md:mt-0 mb-1 rounded-lg flex items-center justify-between" role="alert">
+                <div id="warning-alert"
+                    class="bg-yellow-200 border border-yellow-500 truncate text-sm text-left py-4 px-4 text-nowrap md:mx-0 mt-1 md:mt-0 mb-1 rounded-lg flex items-center justify-between"
+                    role="alert">
                     <span>{{ $message }}</span>
                     <i id="alert-close" class="fa fa-times cursor-pointer" aria-hidden="true"></i>
                 </div>

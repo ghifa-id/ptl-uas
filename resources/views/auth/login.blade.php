@@ -1,8 +1,9 @@
 @extends('layouts.login')
 
 @section('content')
+    <img src="{{ asset('img/logo.png') }}" class="w-28 invert" alt="TE Logo" loading="lazy" />
     <div class="w-full max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden rounded-lg">
-        <h1 class="text-4xl font-bold mb-4 text-center">Kendaraan Dinas</h1>
+        <h1 class="text-4xl font-bold mb-4 text-center">e-DinasDrive</h1>
         <form method="POST" action="{{ route('authenticate') }}">
             @csrf
             <div class="flex flex-col mb-3">
