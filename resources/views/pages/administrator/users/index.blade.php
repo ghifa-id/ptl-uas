@@ -4,7 +4,7 @@
 @section('content')
     <div class="container mx-auto p-4">
         <div class="flex justify-between">
-            <h1 class="text-2xl font-semibold mb-4 text-green-500">Data Pengguna</h1>
+            <h1 class="text-2xl font-semibold mb-4">Data Pengguna</h1>
             <button class="btn btn-success bg-green-500 text-white rounded-lg px-4 py-2 mb-4"
                 id="addNewMatkulButton">Registrasi Pengguna Baru</button>
         </div>
