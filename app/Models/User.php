@@ -40,6 +40,7 @@ class User extends Authenticatable
         'phone_number',
         'department_id',
         'password',
+        'first_password',
         'role',
         'status',
     ];

@@ -16,9 +16,11 @@ return new class extends Migration
             $table->uuid('application_id')->nullable();
             $table->foreign('application_id')->references('uuid')->on('vehicle_application')->onDelete('set null');
             $table->dateTime('return_at');
-            $table->integer('fuel_used');
-            $table->string('photo_receipt');
-            $table->integer('receipt_amount');
+            $table->integer('fuel_used')->nullable();
+            $table->string('photo_receipt')->nullable();
+            $table->integer('receipt_amount')->nullable();
+            $table->uuid('claim_decision_by')->nullable();
+            $table->foreign('claim_decision_by')->references('uuid')->on('users')->onDelete('set null');
             $table->enum('status', ['req_claim', 'claimed', 'refused'])->default('req_claim');
             $table->timestamps();
             $table->softDeletes();

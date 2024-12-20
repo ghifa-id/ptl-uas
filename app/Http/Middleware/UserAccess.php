@@ -11,7 +11,13 @@ class UserAccess
 {
     public function handle(Request $request, Closure $next, $userType): Response
     {
-        $role = Auth::user()->role;
+        $roles = [
+            'staff' => 'applicant',
+            'kasubag' => 'manager',
+            'bendahara' => 'administrator',
+            'supervisor' => 'supervisor',
+        ];
+        $role = $roles[Auth::user()->role];
         if ($role == $userType) {
             return $next($request);
         }

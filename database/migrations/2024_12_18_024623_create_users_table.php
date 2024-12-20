@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('phone_number')->unique();
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('first_password')->nullable();
             $table->uuid('department_id')->nullable();
             $table->foreign('department_id')->references('uuid')->on('department')->onDelete('set null');
-            $table->enum('role', ['administrator', 'superuser', 'manager', 'applicant'])->default('applicant');
+            $table->enum('role', ['bendahara', 'kasubag', 'staff', 'superuser'])->default('staff');
             $table->enum('status', ['set_password', 'active', 'inactive'])->default('set_password');
             $table->timestamps();
             $table->softDeletes();
