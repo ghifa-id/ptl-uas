@@ -1,7 +1,7 @@
 @extends('layouts.login')
 
 @section('content')
-    <img src="{{ asset('img/logo.png') }}" class="w-28 invert" alt="TE Logo" loading="lazy" />
+    <img src="{{ asset('assets/img/logo.png') }}" class="w-28 invert" alt="TE Logo" loading="lazy" />
     <div class="w-full max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden rounded-lg">
         <h1 class="text-4xl font-bold mb-4 text-center">e-DinasDrive</h1>
         <form method="POST" action="{{ route('authenticate') }}">
@@ -36,7 +36,7 @@
                     <i class="fa fa-arrow-right" aria-hidden="true"></i>
                 </button>
                 <div class="flex gap-1">
-                    <span class="text-sm">Belum punya akun? hubungi administrator</span>
+                    <span class="text-sm">Belum punya akun? hubungi bendahara</span>
                     <a href="#" class="text-sm text-blue-500">disini!</a>
                 </div>
             </div>

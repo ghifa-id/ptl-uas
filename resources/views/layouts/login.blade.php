@@ -9,8 +9,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Login | e-DinasDrive</title>
-    <link href="{{ asset('img/logo.png') }}" rel="icon">
-    <link href="{{ asset('img/logo.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/logo.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/logo.png') }}" rel="apple-touch-icon">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
