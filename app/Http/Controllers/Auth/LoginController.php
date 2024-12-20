@@ -48,14 +48,15 @@ class LoginController extends Controller
         $loginType = filter_var($input['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
         if (Auth::attempt([$loginType => $input['login'], 'password' => $input['password']])) {
-            if (Auth::user()->role === 'bendahara') {
-                return redirect()->route('administrator.dashboard');
-            } elseif (Auth::user()->role === 'kasubag') {
-                return redirect()->route('manager.dashboard');
-            } elseif (Auth::user()->role === 'staff') {
-                return redirect()->route('applicant.dashboard');
+            $roles = [
+                'bendahara' => 'administrator',
+                'kasubag' => 'manager',
+                'staff' => 'applicant'
+            ];
+            if(Auth::user()->status === 'set_password') {
+                return redirect()->route('password.first.change');
             } else {
-                return redirect()->route('applicant.dashboard');
+                return redirect()->route($roles[Auth::user()->role].'.dashboard.index');
             }
         } else {
             return redirect()->route('login')

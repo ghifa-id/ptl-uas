@@ -7,7 +7,6 @@
         <form method="POST" action="{{ route('authenticate') }}">
             @csrf
             <div class="flex flex-col mb-3">
-                {{-- <label for="login" class="text-md @error('login') text-red-500 @enderror">Username / Email</label> --}}
                 <div class="flex flex-col">
                     <input id="login" type="text"
                         class="p-4 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full text-xl @error('login') border-red-500 shadow-red-500 @enderror"
@@ -15,12 +14,13 @@
                 </div>
             </div>
             <div class="flex flex-col mb-3">
-                {{-- <label for="password" class="text-md @error('login') text-red-500 @enderror">Password</label> --}}
-
-                <div class="flex flex-col">
+                <div class="flex flex-col relative">
                     <input id="password" type="password"
                         class="p-4 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full text-xl @error('login') border-red-500 shadow-red-500 @enderror"
                         name="password" required placeholder="Kata Sandi">
+                    <div class="absolute right-4 bottom-0 top-0 my-auto h-fit">
+                        <i id="checkPassword" class="fa fa-eye cursor-pointer" aria-hidden="true"></i>
+                    </div>
                 </div>
                 @error('login')
                     <span class="text-red-500 text-sm text-center mt-3" role="alert">

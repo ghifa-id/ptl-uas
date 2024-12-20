@@ -11,7 +11,7 @@ class ErrorLog extends Model
 
     protected $table = 'error_log';
     protected $fillable = [
-        'type',
+        'user_id',
         'message',
         'trace',
         'file',
@@ -22,4 +22,9 @@ class ErrorLog extends Model
     protected $casts = [
         'context' => 'array',
     ];
+
+    public function userId()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'uuid');
+    }
 }

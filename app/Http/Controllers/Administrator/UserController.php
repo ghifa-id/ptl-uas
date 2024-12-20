@@ -133,7 +133,7 @@ class UserController extends Controller
 
             return FormatResponse::send(true, ['record' => $store, 'act' => 'store'], "Registrasi berhasil!", 200);
         } catch (\Throwable $th) {
-            return ErrorHandler::record('error', $th);
+            return ErrorHandler::record($th, 'response');
         }
     }
 
@@ -177,7 +177,7 @@ class UserController extends Controller
 
             return FormatResponse::send(true, ['record' => $store, 'act' => 'update'], "Ubah data pengguna berhasil!", 200);
         } catch (\Throwable $th) {
-            return ErrorHandler::record('error', $th);
+            return ErrorHandler::record($th, 'response');
         }
     }
 
@@ -198,7 +198,7 @@ class UserController extends Controller
 
             return FormatResponse::send(true, $destroy, "Hapus data pengguna berhasil!", 200);
         } catch (\Throwable $th) {
-            return ErrorHandler::record('error', $th);
+            return ErrorHandler::record($th, 'response');
         }
     }
 }

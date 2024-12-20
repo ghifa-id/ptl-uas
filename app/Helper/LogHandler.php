@@ -17,7 +17,7 @@ class LogHandler
                 'detail' => $record['detail'] ?? null,
             ]);
         } catch (\Throwable $th) {
-            return ErrorHandler::record('error', $th);
+            return ErrorHandler::record($th, 'response');
         }
     }
 }

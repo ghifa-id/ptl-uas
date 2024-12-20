@@ -54,7 +54,7 @@
 
                 <div class="flex flex-col w-full mb-2">
                     <label for="phone_number" class="block text-gray-700">Nomor Telepon</label>
-                    <input type="text" id="phone_number" name="phone_number"
+                    <input type="text" id="phone_number" maxlength="15" name="phone_number"
                         class="border shadow-sm rounded-md py-2 px-3">
                 </div>
 

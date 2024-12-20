@@ -50,7 +50,7 @@
                     <div class="flex w-full flex-wrap items-center justify-between">
                         <div class="flex">
                             <a class="mr-3 flex items-center text-neutral-200 hover:text-neutral-400 focus:text-neutral-400 lg:mb-0 lg:mt-0"
-                                href="{{ route($roles[Auth::user()->role] . '.dashboard') }}">
+                                href="{{ route($roles[Auth::user()->role] . '.dashboard.index') }}">
                                 <img src="{{ asset('assets/img/logo.png') }}" class="w-11" alt="TE Logo"
                                     loading="lazy" />
                             </a>
@@ -73,7 +73,7 @@
                                 class="list-style-none me-auto flex flex-col items-center ps-0 lg:flex-row absolute md:relative right-0 left-0 m-auto bottom-0 top-0 h-fit">
                                 <li class="mb-4 lg:mb-0 lg:pe-2">
                                     <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
-                                        href="{{ route($roles[Auth::user()->role] . '.dashboard') }}">Beranda</a>
+                                        href="{{ route($roles[Auth::user()->role] . '.dashboard.index') }}">Beranda</a>
                                 </li>
                                 <li class="mb-4 lg:mb-0 lg:pe-2 relative" data-twe-dropdown-ref
                                     data-twe-dropdown-alignment="start">
@@ -119,7 +119,8 @@
                                 </li>
                                 <li>
                                     <a class="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline bg-surface-dark"
-                                        href="#" data-twe-dropdown-item-ref>Ganti password</a>
+                                        href="{{ route('password.first.change') }}" data-twe-dropdown-item-ref>Ganti
+                                        password</a>
                                 </li>
                                 <li>
                                     <a class="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline bg-surface-dark"
@@ -147,6 +148,14 @@
                     <i id="alert-close" class="fa fa-times cursor-pointer" aria-hidden="true"></i>
                 </div>
             @enderror
+            @if (session('success'))
+                <div id="success-alert"
+                    class="bg-green-200 border border-green-500 truncate text-sm text-left py-4 px-4 text-nowrap md:mx-0 mt-1 md:mt-0 mb-1 rounded-lg flex items-center justify-between"
+                    role="alert">
+                    <span>{{ session('success') }}</span>
+                    <i id="alert-close" class="fa fa-times cursor-pointer" aria-hidden="true"></i>
+                </div>
+            @endif
             @yield('content')
         </main>
     </div>

@@ -3,7 +3,10 @@
 use App\Http\Controllers\Administrator\DepartmentController;
 use App\Http\Controllers\Administrator\UserController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Administrator\DashboardController as AdministratorDashboardController;
+use App\Http\Controllers\Manager\DashboardController as ManagerDashboardController;
+use App\Http\Controllers\Applicant\DashboardController as ApplicantDashboardController;
+use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +20,7 @@ Route::get('/', function () {
         'bendahara' => 'administrator',
     ];
     if (Auth::check()) {
-        return redirect()->route($roles[Auth::user()->role] . '.dashboard');
+        return redirect()->route($roles[Auth::user()->role] . '.dashboard.index');
     } else {
         return view('auth.login');
     }
@@ -25,6 +28,12 @@ Route::get('/', function () {
 
 Route::post('/authenticate', [LoginController::class, 'login'])->name('authenticate');
 Route::post('/logout', [LoginController::class, 'logout'])->middleware(['auth'])->name('logout');
+
+Route::prefix('password')->name('password.')->controller(PasswordController::class)->group(function () {
+    Route::get('/first-change', 'firstChange')->name('first.change');
+    Route::post('/update', 'updatePassword')->name('update');
+    Route::get('/skip', 'skipChange')->name('skipchange');
+});
 
 Route::get('/auth-check', function () {
     if (Auth::check()) {
@@ -38,7 +47,9 @@ Route::get('/auth-check', function () {
 
 // Administrator Route
 Route::prefix('administrator')->name('administrator.')->middleware(['auth', 'role:administrator'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'administrator'])->name('dashboard');
+    Route::prefix('dashboard')->name('dashboard.')->controller(AdministratorDashboardController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
 
     Route::prefix('department')->name('department.')->controller(DepartmentController::class)->group(function () {
         Route::get('/', 'index')->name('index');
@@ -59,10 +70,14 @@ Route::prefix('administrator')->name('administrator.')->middleware(['auth', 'rol
 
 // Manager Route
 Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'manager'])->name('dashboard');
+    Route::prefix('dashboard')->name('dashboard.')->controller(ManagerDashboardController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
 });
 
 // Applicant Route
 Route::prefix('applicant')->name('applicant.')->middleware(['auth', 'role:applicant'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'applicant'])->name('dashboard');
+    Route::prefix('dashboard')->name('dashboard.')->controller(ApplicantDashboardController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
 });

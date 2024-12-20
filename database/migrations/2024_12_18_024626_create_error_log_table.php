@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('error_log', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->uuid('user_id')->nullable();
+            $table->foreign('user_id')->references('uuid')->on('users')->onDelete('set null');
             $table->longText('message')->nullable();
             $table->longText('trace')->nullable();
             $table->string('file')->nullable();
