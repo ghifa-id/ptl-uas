@@ -12,7 +12,6 @@ class Department extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    use Notifiable;
 
     protected $primaryKey ='uuid';
     public $incrementing = false;

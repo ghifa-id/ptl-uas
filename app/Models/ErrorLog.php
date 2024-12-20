@@ -18,4 +18,8 @@ class ErrorLog extends Model
         'line',
         'context',
     ];
+
+    protected $casts = [
+        'context' => 'array',
+    ];
 }
