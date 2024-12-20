@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -29,11 +28,30 @@ class Vehicle extends Model
         });
     }
 
+    protected $dates = ['deleted_at'];
+    protected $table = 'vehicle';
+
     protected $fillable = [
         'type_id',
         'plat_number',
         'merk',
         'status',
-        'status',
+        'created_by',
+        'updated_by',
     ];
+
+    public function typeVehicle()
+    {
+        return $this->belongsTo(TypeVehicle::class, 'read_by', 'uuid');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'uuid');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by', 'uuid');
+    }
 }

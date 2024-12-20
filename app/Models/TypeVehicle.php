@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -28,6 +27,9 @@ class TypeVehicle extends Model
             }
         });
     }
+
+    protected $dates = ['deleted_at'];
+    protected $table = 'type_vehicle';
 
     protected $fillable = [
         'name',

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -29,6 +28,9 @@ class VehicleReturn extends Model
         });
     }
 
+    protected $dates = ['deleted_at'];
+    protected $table = 'vehicle_return';
+
     protected $fillable = [
         'application_id',
         'return_at',
@@ -37,4 +39,9 @@ class VehicleReturn extends Model
         'receipt_amount',
         'status',
     ];
+
+    public function applicantId()
+    {
+        return $this->belongsTo(VehicleApplication::class, 'application_id', 'uuid');
+    }
 }

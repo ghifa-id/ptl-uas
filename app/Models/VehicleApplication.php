@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -29,6 +28,9 @@ class VehicleApplication extends Model
         });
     }
 
+    protected $dates = ['deleted_at'];
+    protected $table = 'vehicle_application';
+
     protected $fillable = [
         'user_id',
         'vehicle_id',
@@ -38,4 +40,19 @@ class VehicleApplication extends Model
         'status',
         'decided_by',
     ];
+
+    public function userId()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'uuid');
+    }
+
+    public function vehicleId()
+    {
+        return $this->belongsTo(Vehicle::class, 'vehicle_id', 'uuid');
+    }
+
+    public function decideBy()
+    {
+        return $this->belongsTo(User::class, 'decided_by', 'uuid');
+    }
 }

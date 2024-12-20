@@ -4,7 +4,6 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -32,6 +31,7 @@ class User extends Authenticatable
     }
     
     protected $dates = ['deleted_at'];
+    protected $table = 'users';
 
     protected $fillable = [
         'name',
@@ -55,5 +55,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function departmentId()
+    {
+        return $this->belongsTo(Department::class, 'department_id', 'uuid');
     }
 }
