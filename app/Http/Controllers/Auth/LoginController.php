@@ -48,11 +48,7 @@ class LoginController extends Controller
         $loginType = filter_var($input['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
         if (Auth::attempt([$loginType => $input['login'], 'password' => $input['password']])) {
-            $roles = [
-                'bendahara' => 'administrator',
-                'kasubag' => 'manager',
-                'staff' => 'applicant'
-            ];
+            $roles = config('roles');
             if(Auth::user()->status === 'set_password') {
                 return redirect()->route('password.first.change');
             } else {

@@ -22,6 +22,7 @@
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Jabatan
                     </th>
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Dihapus pada</th>
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
             </thead>
@@ -125,7 +126,7 @@
             $('#dataTables').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('administrator.user.datatable') !!}',
+                ajax: '{!! route('superuser.user.datatable') !!}',
                 dom: '<"flex items-center justify-between mb-4"<"flex items-center"l><"flex items-center ml-2"f>><"mt-2"rt><"flex items-center justify-between mt-4"<"text-gray-600"i><"flex items-center"p>>',
                 lengthMenu: [10, 25, 50],
                 pagingType: 'simple',
@@ -163,6 +164,10 @@
                     {
                         data: 'statusCast',
                         name: 'statusCast'
+                    },
+                    {
+                        data: 'deletedAt',
+                        name: 'deletedAt'
                     },
                     {
                         data: 'action',
@@ -236,8 +241,8 @@
 
                 const method = $("#method").val() === 'PUT' ? 'PUT' :
                     'POST';
-                const url = method === "POST" ? "{{ route('administrator.user.store') }}" :
-                    "{{ route('administrator.user.update') }}";
+                const url = method === "POST" ? "{{ route('superuser.user.store') }}" :
+                    "{{ route('superuser.user.update') }}";
 
                 $.ajax({
                     url: url,
@@ -275,6 +280,8 @@
                     }
                 } else if (action === 'destroy') {
                     confirmDelete(data.uuid);
+                } else if (action === 'restore') {
+                    confirmRestore(data.uuid);
                 } else {
                     popInfoLogin(data);
                     $('#modalInfoLogin').removeClass('hidden');
@@ -300,7 +307,7 @@
 
             function confirmDelete(uuid) {
                 Swal.fire({
-                    title: 'Kamu yakin ingin menghapus data ini?',
+                    title: 'Kamu yakin ingin menghapus permanent data ini?',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Ya, hapus!',
@@ -317,8 +324,40 @@
                     uuid: uuid
                 };
                 $.ajax({
-                    url: "{{ route('administrator.user.destroy') }}",
+                    url: "{{ route('superuser.user.destroy') }}",
                     type: 'DELETE',
+                    data: data,
+                    success: function(res) {
+                        success(res.message);
+                        $('#dataTables').DataTable().ajax.reload();
+                    },
+                    error: function(err) {
+                        handleError(err);
+                    }
+                });
+            }
+
+            function confirmRestore(uuid) {
+                Swal.fire({
+                    title: 'Kamu yakin ingin mengembalikan data ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, kembalikan!',
+                    cancelButtonText: 'Tidak, jangan!'
+                }).then((result) => {
+                    if (result.value) {
+                        restoreRecord(uuid);
+                    }
+                });
+            }
+
+            function restoreRecord(uuid) {
+                const data = {
+                    uuid: uuid
+                };
+                $.ajax({
+                    url: "{{ route('superuser.user.restore') }}",
+                    type: 'POST',
                     data: data,
                     success: function(res) {
                         success(res.message);

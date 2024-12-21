@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Administrator;
+namespace App\Http\Controllers\Superuser;
 
 use App\Helper\ErrorHandler;
 use App\Helper\FormatResponse;
 use App\Helper\LogHandler;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -22,19 +23,31 @@ class DepartmentController extends Controller
     }
     public function index()
     {
-        return view('pages.administrator.department.index');
+        return view('pages.superuser.department.index');
     }
     public function datatable()
     {
-        return DataTables::of($this->table->orderBy('created_at', 'desc')->select([
+        return DataTables::of($this->table->withTrashed()->orderBy('created_at', 'desc')->select([
             'uuid',
             'code',
             'name',
             'status',
+            'deleted_at',
         ]))
             ->addIndexColumn()
             ->addColumn('statusCast', function ($row) {
                 return $row->status ? 'Aktif' : 'Tidak Aktif';
+            })
+            ->addColumn('deletedAt', function ($row) {
+                $dateCast = Carbon::parse($row->deleted_at)->timezone('Asia/Jakarta')->format('d-m-Y H:i:s');
+                return $row->deleted_at ? '
+                    <div class="flex gap-3 items-center justify-center">
+                        <span>' . $dateCast . '</span>
+                        <button type="button" class="text-green-500 text-xl" data-mode="restore" data-id="' . $row->id . '">
+                            <i class="fa fa-undo" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                ' : null;
             })
             ->addColumn('action', function ($row) {
                 return '
@@ -47,7 +60,7 @@ class DepartmentController extends Controller
                     </button>
                 </div>';
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['deletedAt', 'action'])
             ->make(true);
     }
 
@@ -97,7 +110,7 @@ class DepartmentController extends Controller
                 throw new ValidationException($validator);
             }
 
-            $store = $this->table->find($request->uuid);
+            $store = $this->table->withTrashed()->find($request->uuid);
             $store->code = $request->code;
             $store->name = $request->name;
             $store->status = $request->status;
@@ -121,20 +134,38 @@ class DepartmentController extends Controller
     {
         try {
 
-            $destroy = $this->table->findOrFail($request->uuid);
-            $destroy->status = 0;
-            $destroy->save();
-            $destroy->delete();
+            $destroy = $this->table->withTrashed()->findOrFail($request->uuid);
+            $destroy->forceDelete();
 
             if ($destroy) {
                 LogHandler::activity([
                     'act_on' => 'department',
-                    'activity' => 'remove data department',
-                    'detail' => 'remove data department with code ' . $destroy->code
+                    'activity' => 'permanent delete data department',
+                    'detail' => 'permanent delete data department with code ' . $destroy->code
                 ]);
             }
 
             return FormatResponse::send(true, $destroy, "Hapus data pengguna berhasil!", 200);
+        } catch (\Throwable $th) {
+            return ErrorHandler::record($th, 'response');
+        }
+    }
+
+    public function restore(Request $request)
+    {
+        try {
+            $restore = $this->table->withTrashed()->findOrFail($request->uuid);
+            $restore->restore();
+
+            if ($restore) {
+                LogHandler::activity([
+                    'act_on' => 'department',
+                    'activity' => 'restore data department',
+                    'detail' => 'restore data user with code ' . $restore->code
+                ]);
+            }
+
+            return FormatResponse::send(true, $restore, "Kembalikan data department berhasil!", 200);
         } catch (\Throwable $th) {
             return ErrorHandler::record($th, 'response');
         }

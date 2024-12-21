@@ -1,9 +1,5 @@
 @php
-    $roles = [
-        'staff' => 'applicant',
-        'kasubag' => 'manager',
-        'bendahara' => 'administrator',
-    ];
+    $roles = config('roles');
 @endphp
 
 <!doctype html>
@@ -75,26 +71,50 @@
                                     <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
                                         href="{{ route($roles[Auth::user()->role] . '.dashboard.index') }}">Beranda</a>
                                 </li>
+
+                                {{-- menu administrator / bendahara --}}
+                                @if (Auth::user()->role === 'bendahara')
+                                    <li class="mb-4 lg:mb-0 lg:pe-2">
+                                        <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
+                                            href="{{ route('administrator.user.index') }}">Data Pengguna</a>
+                                    </li>
+                                    <li class="mb-4 lg:mb-0 lg:pe-2">
+                                        <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
+                                            href="{{ route('administrator.department.index') }}">Data Department</a>
+                                    </li>
+                                @endif
+
+                                {{-- menu superuser --}}
+                                @if (Auth::user()->role === 'superuser')
+                                    <li class="mb-4 lg:mb-0 lg:pe-2">
+                                        <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
+                                            href="{{ route('superuser.user.index') }}">Data Pengguna</a>
+                                    </li>
+                                    <li class="mb-4 lg:mb-0 lg:pe-2">
+                                        <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
+                                            href="{{ route('superuser.department.index') }}">Data Department</a>
+                                    </li>
+                                @endif
+
                                 <li class="mb-4 lg:mb-0 lg:pe-2 relative" data-twe-dropdown-ref
                                     data-twe-dropdown-alignment="start">
                                     <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
-                                        id="dropdownMenu1" role="button" data-twe-dropdown-toggle-ref
-                                        aria-expanded="false" href="#">Pengguna <i class="fa fa-angle-down"
+                                        id="dropdownMenu2" role="button" data-twe-dropdown-toggle-ref
+                                        aria-expanded="false" href="#">Dropdown <i class="fa fa-angle-down"
                                             aria-hidden="true"></i></a>
                                     <ul class="absolute z-[1000] float-left !top-4 m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg data-[twe-dropdown-show]:block bg-surface-dark"
-                                        aria-labelledby="dropdownMenu1" data-twe-dropdown-menu-ref>
+                                        aria-labelledby="dropdownMenu2" data-twe-dropdown-menu-ref>
                                         <li>
                                             <a class="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline"
-                                                href="{{ route('administrator.user.index') }}"
-                                                data-twe-dropdown-item-ref>Data Pengguna</a>
+                                                href="#" data-twe-dropdown-item-ref>Menu 1</a>
                                         </li>
                                         <li>
                                             <a class="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline bg-surface-dark"
-                                                href="{{ route('administrator.department.index') }}"
-                                                data-twe-dropdown-item-ref>Data Bagian</a>
+                                                href="#" data-twe-dropdown-item-ref>Menu 2</a>
                                         </li>
                                     </ul>
                                 </li>
+
                             </ul>
                         </div>
                     </div>
@@ -103,8 +123,8 @@
                             <a class="flex items-center whitespace-nowrap transition duration-150 ease-in-out motion-reduce:transition-none"
                                 href="#" id="dropdownMenuButton1" role="button" data-twe-dropdown-toggle-ref
                                 aria-expanded="false">
-                                <img src="{{ asset('assets/img/avatar.png') }}" class="rounded-full w-11" alt=""
-                                    loading="lazy" />
+                                <img src="{{ asset('assets/img/avatar.png') }}" class="rounded-full w-11"
+                                    alt="" loading="lazy" />
                             </a>
                             <ul class="absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg data-[twe-dropdown-show]:block bg-surface-dark"
                                 aria-labelledby="dropdownMenuButton1" data-twe-dropdown-menu-ref>

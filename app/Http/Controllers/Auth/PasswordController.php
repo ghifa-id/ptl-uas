@@ -51,12 +51,7 @@ class PasswordController extends Controller
                 ]);
             }
 
-            $roles = [
-                'staff' => 'applicant',
-                'kasubag' => 'manager',
-                'bendahara' => 'administrator',
-            ];
-
+            $roles = config('roles');
             return redirect()->route($roles[Auth::user()->role] . '.dashboard.index')->with(['success' => 'Kata sandi berhasil diubah!']);
         } catch (\Throwable $th) {
             return ErrorHandler::record($th, 'redirect');
@@ -86,6 +81,7 @@ class PasswordController extends Controller
                 'staff' => 'applicant',
                 'kasubag' => 'manager',
                 'bendahara' => 'administrator',
+                'superuser' => 'superuser'
             ];
 
             return redirect()->route($roles[Auth::user()->role] . '.dashboard.index')->withErrors(['warning' => 'Anda melewati perubahan password pertama anda!']);

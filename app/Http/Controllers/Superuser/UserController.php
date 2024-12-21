@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Administrator;
+namespace App\Http\Controllers\Superuser;
 
 use App\Helper\ErrorHandler;
 use App\Helper\FormatResponse;
@@ -8,6 +8,7 @@ use App\Helper\LogHandler;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -27,13 +28,13 @@ class UserController extends Controller
     public function index()
     {
         $department = $this->department->where('status', true)->orderBy('created_at', 'ASC')->get();
-        return view('pages.administrator.users.index')->with([
+        return view('pages.superuser.users.index')->with([
             'department' => $department
         ]);
     }
     public function datatable()
     {
-        return DataTables::of($this->table->where('uuid', '!=', Auth::id())->where('role','!=','superuser')->orderBy('created_at', 'desc')->select([
+        return DataTables::of($this->table->where('uuid', '!=', Auth::id())->withTrashed()->orderBy('created_at', 'desc')->select([
             'uuid',
             'name',
             'username',
@@ -43,6 +44,7 @@ class UserController extends Controller
             'department_id',
             'role',
             'status',
+            'deleted_at',
         ]))
             ->addIndexColumn()
             ->addColumn('department', function ($row) {
@@ -55,6 +57,17 @@ class UserController extends Controller
                     'bendahara' => 'Bendahara',
                 ];
                 return $roles[$row->role] ?? 'Error';
+            })
+            ->addColumn('deletedAt', function ($row) {
+                $dateCast = Carbon::parse($row->deleted_at)->timezone('Asia/Jakarta')->format('d-m-Y H:i:s');
+                return $row->deleted_at ? '
+                    <div class="flex gap-3 items-center justify-center">
+                        <span>' . $dateCast . '</span>
+                        <button type="button" class="text-green-500 text-xl" data-mode="restore" data-id="' . $row->id . '">
+                            <i class="fa fa-undo" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                ' : null;
             })
             ->addColumn('statusCast', function ($row) {
                 if ($row->status === 'set_password') {
@@ -74,9 +87,10 @@ class UserController extends Controller
                     <button type="button" class="text-red-500 text-2xl" data-mode="destroy" data-id="' . $row->id . '">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
+                    
                 </div>';
             })
-            ->rawColumns(['statusCast', 'action'])
+            ->rawColumns(['deletedAt', 'statusCast', 'action'])
             ->make(true);
     }
 
@@ -152,13 +166,13 @@ class UserController extends Controller
                 throw new ValidationException($validator);
             }
 
-            $store = $this->table->find($request->uuid);
+            $store = $this->table->withTrashed()->findOrFail($request->uuid);
             $store->name = $request->name;
             $store->email = $request->email;
             $store->phone_number = $request->phone_number;
             $store->department_id = $request->department_id;
             $store->role = $request->role;
-            if($store->status !== 'set_password') {
+            if ($store->status !== 'set_password') {
                 $store->status = $request->status;
                 $store->update();
             } else {
@@ -182,23 +196,38 @@ class UserController extends Controller
     public function destroy(Request $request)
     {
         try {
-
-            $destroy = $this->table->findOrFail($request->uuid);
-            if($destroy->status !== 'set_password') {
-                $destroy->status = 'inactive';
-                $destroy->save();
-            }
-            $destroy->delete();
+            $destroy = $this->table->withTrashed()->findOrFail($request->uuid);
+            $destroy->forceDelete();
 
             if ($destroy) {
                 LogHandler::activity([
                     'act_on' => 'user',
-                    'activity' => 'remove data user',
-                    'detail' => 'remove data user with username ' . $destroy->username
+                    'activity' => 'permanent delete data user',
+                    'detail' => 'permanent delete data user with username ' . $destroy->username
                 ]);
             }
 
             return FormatResponse::send(true, $destroy, "Hapus data pengguna berhasil!", 200);
+        } catch (\Throwable $th) {
+            return ErrorHandler::record($th, 'response');
+        }
+    }
+
+    public function restore(Request $request)
+    {
+        try {
+            $restore = $this->table->withTrashed()->findOrFail($request->uuid);
+            $restore->restore();
+
+            if ($restore) {
+                LogHandler::activity([
+                    'act_on' => 'user',
+                    'activity' => 'restore data user',
+                    'detail' => 'restore data user with username ' . $restore->username
+                ]);
+            }
+
+            return FormatResponse::send(true, $restore, "Kembalikan data pengguna berhasil!", 200);
         } catch (\Throwable $th) {
             return ErrorHandler::record($th, 'response');
         }

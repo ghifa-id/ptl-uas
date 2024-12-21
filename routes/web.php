@@ -1,12 +1,15 @@
 <?php
 
-use App\Http\Controllers\Administrator\DepartmentController;
-use App\Http\Controllers\Administrator\UserController;
+use App\Http\Controllers\Administrator\DepartmentController as AdministratorDepartmentController;
+use App\Http\Controllers\Administrator\UserController as AdministratorUserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Administrator\DashboardController as AdministratorDashboardController;
 use App\Http\Controllers\Manager\DashboardController as ManagerDashboardController;
 use App\Http\Controllers\Applicant\DashboardController as ApplicantDashboardController;
+use App\Http\Controllers\Superuser\DashboardController as SuperuserDashboardController;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Superuser\DepartmentController as SuperuserDepartmentController;
+use App\Http\Controllers\Superuser\UserController as SuperuserUserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -14,11 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    $roles = [
-        'staff' => 'applicant',
-        'kasubag' => 'manager',
-        'bendahara' => 'administrator',
-    ];
+    $roles = config('roles');
     if (Auth::check()) {
         return redirect()->route($roles[Auth::user()->role] . '.dashboard.index');
     } else {
@@ -51,7 +50,7 @@ Route::prefix('administrator')->name('administrator.')->middleware(['auth', 'rol
         Route::get('/', 'index')->name('index');
     });
 
-    Route::prefix('department')->name('department.')->controller(DepartmentController::class)->group(function () {
+    Route::prefix('department')->name('department.')->controller(AdministratorDepartmentController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/data-table', 'datatable')->name('datatable');
         Route::post('/store', 'store')->name('store');
@@ -59,7 +58,7 @@ Route::prefix('administrator')->name('administrator.')->middleware(['auth', 'rol
         Route::delete('/delete', 'destroy')->name('destroy');
     });
 
-    Route::prefix('user')->name('user.')->controller(UserController::class)->group(function () {
+    Route::prefix('user')->name('user.')->controller(AdministratorUserController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/data-table', 'datatable')->name('datatable');
         Route::post('/store', 'store')->name('store');
@@ -79,5 +78,30 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])
 Route::prefix('applicant')->name('applicant.')->middleware(['auth', 'role:applicant'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->controller(ApplicantDashboardController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+    });
+});
+
+// Superuser Route
+Route::prefix('superuser')->name('superuser.')->middleware(['auth', 'role:superuser'])->group(function () {
+    Route::prefix('dashboard')->name('dashboard.')->controller(SuperuserDashboardController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
+
+    Route::prefix('department')->name('department.')->controller(SuperuserDepartmentController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/data-table', 'datatable')->name('datatable');
+        Route::post('/store', 'store')->name('store');
+        Route::put('/update', 'update')->name('update');
+        Route::delete('/delete', 'destroy')->name('destroy');
+        Route::post('/restore', 'restore')->name('restore');
+    });
+
+    Route::prefix('user')->name('user.')->controller(SuperuserUserController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/data-table', 'datatable')->name('datatable');
+        Route::post('/store', 'store')->name('store');
+        Route::put('/update', 'update')->name('update');
+        Route::delete('/delete', 'destroy')->name('destroy');
+        Route::post('/restore', 'restore')->name('restore');
     });
 });
