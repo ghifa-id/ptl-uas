@@ -224,7 +224,7 @@
                 }
             });
 
-            $('#save').click(async function(e) { // Marked as async
+            $('#save').click(async function(e) {
                 e.preventDefault();
                 $(this).prop('disabled', true).html(
                     '<span class="mr-2">Laporkan Sekarang</span><i class="fa fa-spinner fa-pulse fa-fw"></i>'
@@ -232,7 +232,6 @@
 
                 const formData = new FormData($('#dataForm')[0]);
 
-                // Get the file input
                 const fileInput = document.getElementById('photo_receipt');
                 const file = fileInput.files[0];
 
