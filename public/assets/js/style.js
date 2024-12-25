@@ -4,9 +4,16 @@ $(document).ready(function() {
     });
 
     $("#alert-close").click(function() {
+        $("#error-alert").addClass("hidden");
         $("#warning-alert").addClass("hidden");
         $("#success-alert").addClass("hidden");
     });
+    
+    setTimeout(function() {
+        $("#error-alert").addClass("hidden");
+        $("#warning-alert").addClass("hidden");
+        $("#success-alert").addClass("hidden");
+    }, 3000);
 
     $("#checkPassword").click(function () {
         const passwordField = $("#password");

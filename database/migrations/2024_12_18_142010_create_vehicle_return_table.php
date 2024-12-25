@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('vehicle_return', function (Blueprint $table) {
             $table->uuid('uuid')->primary();
-            $table->uuid('application_id')->nullable();
+            $table->uuid('application_id')->unique()->nullable();
             $table->foreign('application_id')->references('uuid')->on('vehicle_application')->onDelete('set null');
             $table->dateTime('return_at');
             $table->integer('fuel_used')->nullable();
@@ -21,7 +21,8 @@ return new class extends Migration
             $table->integer('receipt_amount')->nullable();
             $table->uuid('claim_decision_by')->nullable();
             $table->foreign('claim_decision_by')->references('uuid')->on('users')->onDelete('set null');
-            $table->enum('status', ['req_claim', 'claimed', 'refused'])->default('req_claim');
+            $table->dateTime('claimed_at')->nullable();
+            $table->enum('status', ['req_claim', 'claimed', 'refused', 'returned'])->default('req_claim');
             $table->timestamps();
             $table->softDeletes();
         });

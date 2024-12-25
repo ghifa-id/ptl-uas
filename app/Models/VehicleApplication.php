@@ -39,6 +39,7 @@ class VehicleApplication extends Model
         'end_booking',
         'status',
         'decided_by',
+        'decided_at'
     ];
 
     public function userId()

@@ -6,7 +6,7 @@
         <div class="flex justify-between">
             <h1 class="text-2xl font-semibold mb-4">Data Pengguna</h1>
             <button class="btn btn-success bg-green-500 text-white rounded-lg px-4 py-2 mb-4"
-                id="addNewMatkulButton">Registrasi Pengguna Baru</button>
+                id="addNewDataButton">Registrasi Pengguna</button>
         </div>
         <table class="min-w-full bg-white divide-y divide-gray-200 border" id="dataTables">
             <thead class="bg-gray-50">
@@ -123,16 +123,13 @@
     <script>
         $(function() {
             $('#dataTables').DataTable({
-                processing: true,
-                serverSide: true,
                 ajax: '{!! route('administrator.user.datatable') !!}',
-                dom: '<"flex items-center justify-between mb-4"<"flex items-center"l><"flex items-center ml-2"f>><"mt-2"rt><"flex items-center justify-between mt-4"<"text-gray-600"i><"flex items-center"p>>',
+                dom: '<"flex flex-col md:flex-row gap-2 md:items-center justify-between mb-4"<"flex items-center"l><"flex items-center"f>><"max-w-full h-fit overflow-x-auto md:overflow-x-visible"rt><"flex items-center justify-between mt-4"<"text-gray-600"i><"flex items-center"p>>',
                 lengthMenu: [10, 25, 50],
                 pagingType: 'simple',
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
-                        orderable: false,
                         searchable: false,
                         width: 40
                     },
@@ -173,16 +170,24 @@
                     }
                 ],
                 initComplete: function() {
+                    $('#dataTables_length label:contains("Show")').contents().filter(function() {
+                        return this.nodeType === 3 && this.nodeValue.trim() === "Show";
+                    }).remove();
+
+                    $('#dataTables_filter label:contains("Search:")').contents().filter(function() {
+                        return this.nodeType === 3 && this.nodeValue.trim() === "Search:";
+                    }).remove();
+
                     $('#dataTables_length select')
                         .addClass('border border-gray-300 rounded-lg p-2')
                         .css('width', '80px');
 
                     $('#dataTables_filter input')
-                        .addClass('border border-gray-300 rounded-lg p-2 ml-2')
+                        .addClass('border border-gray-300 rounded-lg p-2')
                         .attr('placeholder', 'Search...')
                         .css('display', 'inline-block');
 
-                    $('.dataTables_paginate .paginate_button')
+                    $('.paginate_button')
                         .addClass(
                             'border border-gray-300 rounded-lg p-2 mx-1 hover:bg-gray-200 text-gray-600'
                         );
@@ -195,7 +200,7 @@
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('#addNewMatkulButton').click(function() {
+            $('#addNewDataButton').click(function() {
                 $('#dataModal').removeClass('hidden');
                 $("#method").val('POST');
                 $('#dataForm')[0].reset();
@@ -233,6 +238,7 @@
 
             $('#save').click(function(e) {
                 e.preventDefault();
+                $(this).prop('disabled', true).html('<span class="mr-2">Simpan</span><i class="fa fa-spinner fa-pulse fa-fw"></i>');
 
                 const method = $("#method").val() === 'PUT' ? 'PUT' :
                     'POST';
@@ -248,7 +254,7 @@
                         closeModal();
                         $('#dataTables').DataTable().ajax.reload();
                         $('#dataForm')[0].reset();
-                        if(res.data.act === 'store') {
+                        if (res.data.act === 'store') {
                             $("#textUsername").val(res.data.record.username);
                             $("#textEmail").val(res.data.record.email);
                             $("#textPassword").val(res.data.record.first_password);
@@ -257,6 +263,9 @@
                     },
                     error: function(err) {
                         handleError(err);
+                    },
+                    complete: function() {
+                        $('#save').prop('disabled', false).text('Simpan');
                     }
                 });
             });
@@ -270,7 +279,7 @@
                     $("#method").val('PUT');
                     $('#dataModal').removeClass('hidden');
                     $('#username').prop('disabled', true);
-                    if(data.status !== 'set_password') {
+                    if (data.status !== 'set_password') {
                         $("#inputStatus").removeClass('hidden');
                     }
                 } else if (action === 'destroy') {

@@ -51,7 +51,7 @@ class DepartmentController extends Controller
             })
             ->addColumn('action', function ($row) {
                 return '
-                <div class="flex justify-center gap-2">
+                <div class="flex justify-center gap-3">
                     <button type="button" class="text-blue-500 text-2xl" data-mode="edit" data-id="' . $row->id . '">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     </button>

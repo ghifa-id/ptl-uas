@@ -40,9 +40,9 @@ class Vehicle extends Model
         'updated_by',
     ];
 
-    public function typeVehicle()
+    public function typeId()
     {
-        return $this->belongsTo(TypeVehicle::class, 'read_by', 'uuid');
+        return $this->belongsTo(TypeVehicle::class, 'type_id', 'uuid');
     }
 
     public function createdBy()

@@ -73,6 +73,16 @@ class UsersSeeder extends Seeder
                 'role' => 'staff',
                 'status' => 'active',
             ],
+            [
+                'name' => 'Superuser',
+                'username' => 'superuser',
+                'email' => 'superuser@mail.com',
+                'phone_number' => '081100000003',
+                'department_id' => $uuidStarted[1],
+                'password' => bcrypt('superuser123'),
+                'role' => 'superuser',
+                'status' => 'active',
+            ],
         ];
 
         foreach ($users as $key => $user) {

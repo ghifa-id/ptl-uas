@@ -49,10 +49,19 @@ class LoginController extends Controller
 
         if (Auth::attempt([$loginType => $input['login'], 'password' => $input['password']])) {
             $roles = config('roles');
-            if(Auth::user()->status === 'set_password') {
-                return redirect()->route('password.first.change');
+            if (Auth::user()->status === 'set_password') {
+                return redirect()->route('account.password.first-change');
+            } elseif (Auth::user()->status === 'inactive') {
+                Auth::logout();
+                return redirect()->route('login')->with('warning', 'Akun anda saat ini berstatus tidak aktif, hubungi bendahara untuk mengaktifkan kembali akun anda!');
             } else {
-                return redirect()->route($roles[Auth::user()->role].'.dashboard.index');
+                if (Auth::user()->role === 'staff') {
+                    return redirect()->route('applicant.booking.index');
+                } elseif (Auth::user()->role === 'superuser') {
+                    return redirect()->route('superuser.user.index');
+                } else {
+                    return redirect()->route($roles[Auth::user()->role] . '.dashboard.index');
+                }
             }
         } else {
             return redirect()->route('login')

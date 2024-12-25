@@ -1,10 +1,10 @@
 @extends('layouts.app')
-@section('title', 'Manajemen Data Bagian')
+@section('title', 'Manajemen Data Kendaraan')
 
 @section('content')
     <div class="container mx-auto p-4">
         <div class="flex justify-between">
-            <h1 class="text-2xl font-semibold mb-4">Data Bagian</h1>
+            <h1 class="text-2xl font-semibold mb-4">Data Kendaraan</h1>
             <button class="btn btn-success bg-green-500 text-white rounded-lg px-4 py-2 mb-4"
                 id="addNewDataButton">Tambah Data</button>
         </div>
@@ -12,9 +12,10 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Kode</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Bagian</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tipe Kendaraan</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Merk Kendaraan</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Plat Nomor Kendaraan</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status Kendaraan</th>
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
             </thead>
@@ -31,13 +32,23 @@
                 <input type="hidden" id="method" name="method">
 
                 <div class="flex flex-col w-full mb-2">
-                    <label for="code" class="block text-gray-700">Kode Bagian</label>
-                    <input type="text" id="code" name="code" class="border shadow-sm rounded-md py-2 px-3">
+                    <label for="type_id" class="block text-gray-700">Tipe Kendaraan</label>
+                    <select id="type_id" name="type_id" class="border shadow-sm rounded-md py-2 px-3">
+                        <option value="">Pilih Tipe Kendaraan</option>
+                        @foreach ($type as $data)
+                            <option value="{{ $data->uuid }}">{{ $data->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="flex flex-col w-full mb-2">
-                    <label for="name" class="block text-gray-700">Nama Bagian</label>
-                    <input type="text" id="name" name="name" class="border shadow-sm rounded-md py-2 px-3">
+                    <label for="merk" class="block text-gray-700">Merk Kendaraan</label>
+                    <input type="text" id="merk" name="merk" class="border shadow-sm rounded-md py-2 px-3">
+                </div>
+
+                <div class="flex flex-col w-full mb-2">
+                    <label for="plat_number" class="block text-gray-700">Plat Nomor Kendaraan</label>
+                    <input type="text" id="plat_number" name="plat_number" maxlength="12" class="border shadow-sm rounded-md py-2 px-3">
                 </div>
 
                 <div class="flex flex-col w-full mb-4">
@@ -61,7 +72,7 @@
     <script>
         $(function() {
             $('#dataTables').DataTable({
-                ajax: '{!! route('administrator.department.datatable') !!}',
+                ajax: '{!! route('administrator.vehicle.datatable') !!}',
                 dom: '<"flex flex-col md:flex-row gap-2 md:items-center justify-between mb-4"<"flex items-center"l><"flex items-center"f>><"max-w-full h-fit overflow-x-auto md:overflow-x-visible"rt><"flex items-center justify-between mt-4"<"text-gray-600"i><"flex items-center"p>>',
                 lengthMenu: [10, 25, 50],
                 pagingType: 'simple',
@@ -72,12 +83,16 @@
                         width: 40
                     },
                     {
-                        data: 'code',
-                        name: 'code'
+                        data: 'type',
+                        name: 'type'
                     },
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'merk',
+                        name: 'merk'
+                    },
+                    {
+                        data: 'plat_number',
+                        name: 'plat_number'
                     },
                     {
                         data: 'statusCast',
@@ -154,8 +169,8 @@
 
                 const method = $("#method").val() === 'PUT' ? 'PUT' :
                     'POST';
-                const url = method === "POST" ? "{{ route('administrator.department.store') }}" :
-                    "{{ route('administrator.department.update') }}";
+                const url = method === "POST" ? "{{ route('administrator.vehicle.store') }}" :
+                    "{{ route('administrator.vehicle.update') }}";
 
                 $.ajax({
                     url: url,
@@ -191,8 +206,9 @@
 
             function populateForm(data) {
                 $("#recordId").val(data.uuid);
-                $("#code").val(data.code);
-                $("#name").val(data.name);
+                $("#type_id").val(data.type_id);
+                $("#merk").val(data.merk);
+                $("#plat_number").val(data.plat_number);
                 $("#status").val(data.status);
             }
 
@@ -215,7 +231,7 @@
                     uuid: id
                 };
                 $.ajax({
-                    url: "{{ route('administrator.department.destroy') }}",
+                    url: "{{ route('administrator.vehicle.destroy') }}",
                     type: 'DELETE',
                     data: data,
                     success: function(res) {

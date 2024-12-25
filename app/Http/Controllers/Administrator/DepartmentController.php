@@ -7,6 +7,7 @@ use App\Helper\FormatResponse;
 use App\Helper\LogHandler;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -15,15 +16,19 @@ use Yajra\DataTables\DataTables;
 class DepartmentController extends Controller
 {
     protected $table;
+    protected $user;
 
-    public function __construct(Department $table)
+    public function __construct(Department $table, User $users)
     {
         $this->table = $table;
+        $this->user = $users;
     }
+    
     public function index()
     {
         return view('pages.administrator.department.index');
     }
+
     public function datatable()
     {
         return DataTables::of($this->table->orderBy('created_at', 'desc')->select([
@@ -38,7 +43,7 @@ class DepartmentController extends Controller
             })
             ->addColumn('action', function ($row) {
                 return '
-                <div class="flex justify-center gap-2">
+                <div class="flex justify-center gap-3">
                     <button type="button" class="text-blue-500 text-2xl" data-mode="edit" data-id="' . $row->id . '">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     </button>
@@ -102,6 +107,14 @@ class DepartmentController extends Controller
             $store->name = $request->name;
             $store->status = $request->status;
             $store->save();
+
+            if($request->status === '0') {
+                $user = $this->user->where('department_id', $request->uuid)->get();
+                foreach($user as $dataUser){
+                    $dataUser->status = 'inactive';
+                    $dataUser->save();
+                }
+            }
 
             if ($store) {
                 LogHandler::activity([

@@ -1,10 +1,10 @@
 @extends('layouts.app')
-@section('title', 'Manajemen Data Bagian')
+@section('title', 'Manajemen Data Tipe Kendaraan')
 
 @section('content')
     <div class="container mx-auto p-4">
         <div class="flex justify-between">
-            <h1 class="text-2xl font-semibold mb-4">Data Bagian</h1>
+            <h1 class="text-2xl font-semibold mb-4">Data Tipe Kendaraan</h1>
             <button class="btn btn-success bg-green-500 text-white rounded-lg px-4 py-2 mb-4"
                 id="addNewDataButton">Tambah Data</button>
         </div>
@@ -12,9 +12,7 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Kode</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Bagian</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Tipe Kendaraan</th>
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
             </thead>
@@ -31,22 +29,8 @@
                 <input type="hidden" id="method" name="method">
 
                 <div class="flex flex-col w-full mb-2">
-                    <label for="code" class="block text-gray-700">Kode Bagian</label>
-                    <input type="text" id="code" name="code" class="border shadow-sm rounded-md py-2 px-3">
-                </div>
-
-                <div class="flex flex-col w-full mb-2">
-                    <label for="name" class="block text-gray-700">Nama Bagian</label>
+                    <label for="name" class="block text-gray-700">Nama Tipe Kendaraan</label>
                     <input type="text" id="name" name="name" class="border shadow-sm rounded-md py-2 px-3">
-                </div>
-
-                <div class="flex flex-col w-full mb-4">
-                    <label for="status" class="block text-gray-700">Status</label>
-                    <select id="status" name="status" class="border shadow-sm rounded-md py-2 px-3">
-                        <option value="">Pilih Status</option>
-                        <option value="1">Aktif</option>
-                        <option value="0">Tidak Aktif</option>
-                    </select>
                 </div>
 
                 <!-- Modal Buttons -->
@@ -61,7 +45,7 @@
     <script>
         $(function() {
             $('#dataTables').DataTable({
-                ajax: '{!! route('administrator.department.datatable') !!}',
+                ajax: '{!! route('administrator.vehicle.type.datatable') !!}',
                 dom: '<"flex flex-col md:flex-row gap-2 md:items-center justify-between mb-4"<"flex items-center"l><"flex items-center"f>><"max-w-full h-fit overflow-x-auto md:overflow-x-visible"rt><"flex items-center justify-between mt-4"<"text-gray-600"i><"flex items-center"p>>',
                 lengthMenu: [10, 25, 50],
                 pagingType: 'simple',
@@ -72,16 +56,8 @@
                         width: 40
                     },
                     {
-                        data: 'code',
-                        name: 'code'
-                    },
-                    {
                         data: 'name',
                         name: 'name'
-                    },
-                    {
-                        data: 'statusCast',
-                        name: 'statusCast'
                     },
                     {
                         data: 'action',
@@ -154,8 +130,8 @@
 
                 const method = $("#method").val() === 'PUT' ? 'PUT' :
                     'POST';
-                const url = method === "POST" ? "{{ route('administrator.department.store') }}" :
-                    "{{ route('administrator.department.update') }}";
+                const url = method === "POST" ? "{{ route('administrator.vehicle.type.store') }}" :
+                    "{{ route('administrator.vehicle.type.update') }}";
 
                 $.ajax({
                     url: url,
@@ -191,9 +167,7 @@
 
             function populateForm(data) {
                 $("#recordId").val(data.uuid);
-                $("#code").val(data.code);
                 $("#name").val(data.name);
-                $("#status").val(data.status);
             }
 
             function confirmDelete(id) {
@@ -215,7 +189,7 @@
                     uuid: id
                 };
                 $.ajax({
-                    url: "{{ route('administrator.department.destroy') }}",
+                    url: "{{ route('administrator.vehicle.type.destroy') }}",
                     type: 'DELETE',
                     data: data,
                     success: function(res) {

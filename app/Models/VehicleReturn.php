@@ -37,6 +37,7 @@ class VehicleReturn extends Model
         'fuel_used',
         'photo_receipt',
         'receipt_amount',
+        'claimed_at',
         'status',
     ];
 

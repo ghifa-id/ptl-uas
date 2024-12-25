@@ -40,16 +40,24 @@
 <body>
     <div id="app">
         <nav
-            class="flex-no-wrap fixed flex w-full items-center justify-between py-2 shadow-dark-mild bg-gray-800 lg:flex-wrap lg:justify-start lg:py-3 min-h-[70px]">
+            class="flex-no-wrap fixed z-[1000] flex w-full items-center justify-between py-2 shadow-dark-mild bg-gray-800 lg:flex-wrap lg:justify-start lg:py-3 min-h-[70px]">
             <div class="container mx-auto px-2 md:px-0">
                 <div class="flex items-start my-2 md:my-0">
                     <div class="flex w-full flex-wrap items-center justify-between">
                         <div class="flex">
+                            @if(Auth::user()->role !== "staff")
                             <a class="mr-3 flex items-center text-neutral-200 hover:text-neutral-400 focus:text-neutral-400 lg:mb-0 lg:mt-0"
                                 href="{{ route($roles[Auth::user()->role] . '.dashboard.index') }}">
                                 <img src="{{ asset('assets/img/logo.png') }}" class="w-11" alt="TE Logo"
                                     loading="lazy" />
                             </a>
+                            @else
+                            <a class="mr-3 flex items-center text-neutral-200 hover:text-neutral-400 focus:text-neutral-400 lg:mb-0 lg:mt-0"
+                                href="{{ route('applicant.booking.index') }}">
+                                <img src="{{ asset('assets/img/logo.png') }}" class="w-11" alt="TE Logo"
+                                    loading="lazy" />
+                            </a>
+                            @endif
                             <button id="hamburger"
                                 class="block border-0 bg-transparent px-2 text-black/50 hover:no-underline hover:shadow-none focus:no-underline focus:shadow-none focus:outline-none focus:ring-0 text-neutral-200 lg:hidden"
                                 type="button" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,10 +75,27 @@
                             id="navbarMenu">
                             <ul
                                 class="list-style-none me-auto flex flex-col items-center ps-0 lg:flex-row absolute md:relative right-0 left-0 m-auto bottom-0 top-0 h-fit">
-                                <li class="mb-4 lg:mb-0 lg:pe-2">
-                                    <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
-                                        href="{{ route($roles[Auth::user()->role] . '.dashboard.index') }}">Beranda</a>
-                                </li>
+                                @if (Auth::user()->role === 'bendahara')
+                                    <li class="mb-4 lg:mb-0 lg:pe-2">
+                                        <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
+                                            href="{{ route('administrator.dashboard.index') }}">Pembayaran BBM</a>
+                                    </li>
+                                @endif
+
+                                @if (Auth::user()->role === 'kasubag')
+                                    <li class="mb-4 lg:mb-0 lg:pe-2">
+                                        <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
+                                            href="{{ route('manager.dashboard.index') }}">Beranda</a>
+                                    </li>
+                                    <li class="mb-4 lg:mb-0 lg:pe-2">
+                                        <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
+                                            href="{{ route('manager.booking.index') }}">Riwayat Pengajuan</a>
+                                    </li>
+                                    <li class="mb-4 lg:mb-0 lg:pe-2">
+                                        <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
+                                            href="#">Pengembalian Kendaraan</a>
+                                    </li>
+                                @endif
 
                                 {{-- menu administrator / bendahara --}}
                                 @if (Auth::user()->role === 'bendahara')
@@ -81,6 +106,24 @@
                                     <li class="mb-4 lg:mb-0 lg:pe-2">
                                         <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
                                             href="{{ route('administrator.department.index') }}">Data Department</a>
+                                    </li>
+                                    <li class="mb-4 lg:mb-0 lg:pe-2 relative" data-twe-dropdown-ref
+                                        data-twe-dropdown-alignment="start">
+                                        <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
+                                            id="dropdownMenu2" role="button" data-twe-dropdown-toggle-ref
+                                            aria-expanded="false" href="#">Kendaraan <i class="fa fa-angle-down"
+                                                aria-hidden="true"></i></a>
+                                        <ul class="absolute z-[1000] float-left !top-4 m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg data-[twe-dropdown-show]:block bg-surface-dark"
+                                            aria-labelledby="dropdownMenu2" data-twe-dropdown-menu-ref>
+                                            <li>
+                                                <a class="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline"
+                                                    href="{{ route('administrator.vehicle.index') }}" data-twe-dropdown-item-ref>Data Kendaraan</a>
+                                            </li>
+                                            <li>
+                                                <a class="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline bg-surface-dark"
+                                                    href="{{ route('administrator.vehicle.type') }}" data-twe-dropdown-item-ref>Type Kendaraan</a>
+                                            </li>
+                                        </ul>
                                     </li>
                                 @endif
 
@@ -96,7 +139,19 @@
                                     </li>
                                 @endif
 
-                                <li class="mb-4 lg:mb-0 lg:pe-2 relative" data-twe-dropdown-ref
+                                {{-- menu staff --}}
+                                @if (Auth::user()->role === 'staff')
+                                    <li class="mb-4 lg:mb-0 lg:pe-2">
+                                        <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
+                                            href="{{ route('applicant.booking.index') }}">Booking Kendaraan</a>
+                                    </li>
+                                    <li class="mb-4 lg:mb-0 lg:pe-2">
+                                        <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
+                                            href="{{ route('applicant.return.index') }}">Pengembalian & Claim BBM</a>
+                                    </li>
+                                @endif
+
+                                {{-- <li class="mb-4 lg:mb-0 lg:pe-2 relative" data-twe-dropdown-ref
                                     data-twe-dropdown-alignment="start">
                                     <a class="transition duration-200 hover:ease-in-out motion-reduce:transition-none text-white hover:text-gray-400 focus:text-gray-400 active:text-gray-400 lg:px-2"
                                         id="dropdownMenu2" role="button" data-twe-dropdown-toggle-ref
@@ -113,7 +168,7 @@
                                                 href="#" data-twe-dropdown-item-ref>Menu 2</a>
                                         </li>
                                     </ul>
-                                </li>
+                                </li> --}}
 
                             </ul>
                         </div>
@@ -134,13 +189,8 @@
                                         data-twe-dropdown-item-ref>{{ Auth::user()->name }}</span>
                                 </li>
                                 <li>
-                                    <a class="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline"
-                                        href="#" data-twe-dropdown-item-ref>Profil</a>
-                                </li>
-                                <li>
                                     <a class="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline bg-surface-dark"
-                                        href="{{ route('password.first.change') }}" data-twe-dropdown-item-ref>Ganti
-                                        password</a>
+                                        href="{{ route('account.profile') }}" data-twe-dropdown-item-ref>Profil & Kata sandi</a>
                                 </li>
                                 <li>
                                     <a class="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 focus:outline-none active:no-underline bg-surface-dark"
@@ -159,10 +209,18 @@
                 </div>
             </div>
         </nav>
-        <main class="container mx-auto pt-20 px-2 md:px-0">
+        <main class="container mx-auto pt-20 pb-6 px-2 md:px-0">
+            @error('error')
+                <div id="error-alert"
+                    class="absolute z-0 right-4 bg-red-200 border border-red-500 truncate text-sm text-left py-4 px-4 text-nowrap md:mx-0 mt-1 md:mt-0 mb-1 rounded-lg flex items-center justify-between gap-4"
+                    role="alert">
+                    <span>{{ $message }}</span>
+                    <i id="alert-close" class="fa fa-times cursor-pointer" aria-hidden="true"></i>
+                </div>
+            @enderror
             @error('warning')
                 <div id="warning-alert"
-                    class="bg-yellow-200 border border-yellow-500 truncate text-sm text-left py-4 px-4 text-nowrap md:mx-0 mt-1 md:mt-0 mb-1 rounded-lg flex items-center justify-between"
+                    class="absolute z-0 right-4 bg-yellow-200 border border-yellow-500 truncate text-sm text-left py-4 px-4 text-nowrap md:mx-0 mt-1 md:mt-0 mb-1 rounded-lg flex items-center justify-between gap-4"
                     role="alert">
                     <span>{{ $message }}</span>
                     <i id="alert-close" class="fa fa-times cursor-pointer" aria-hidden="true"></i>
@@ -170,7 +228,7 @@
             @enderror
             @if (session('success'))
                 <div id="success-alert"
-                    class="bg-green-200 border border-green-500 truncate text-sm text-left py-4 px-4 text-nowrap md:mx-0 mt-1 md:mt-0 mb-1 rounded-lg flex items-center justify-between"
+                    class="absolute z-0 right-4 bg-green-200 border border-green-500 truncate text-sm text-left py-4 px-4 text-nowrap md:mx-0 mt-1 md:mt-0 mb-1 rounded-lg flex items-center justify-between gap-4"
                     role="alert">
                     <span>{{ session('success') }}</span>
                     <i id="alert-close" class="fa fa-times cursor-pointer" aria-hidden="true"></i>

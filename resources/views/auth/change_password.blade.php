@@ -3,7 +3,7 @@
 @section('content')
     <div class="w-full max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden rounded-lg">
         <h1 class="text-4xl font-bold mb-4 text-center">Ganti Password</h1>
-        <form method="POST" action="{{ route('password.update') }}">
+        <form method="POST" action="{{ route('account.password.update') }}">
             @csrf
             <div class="flex flex-col mb-3">
                 <div class="flex flex-col">
@@ -33,7 +33,7 @@
                 </button>
                 <div class="flex gap-1">
                     <span class="text-sm">Bawa saya kehalaman beranda!</span>
-                    <a href="{{ route('password.skipchange') }}" class="text-sm text-blue-500">click disini</a>
+                    <a href="{{ route('account.password.skipchange') }}" class="text-sm text-blue-500">click disini</a>
                 </div>
             </div>
         </form>

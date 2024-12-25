@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('activity');
             $table->string('detail')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

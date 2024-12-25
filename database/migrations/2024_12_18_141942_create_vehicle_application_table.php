@@ -20,9 +20,10 @@ return new class extends Migration
             $table->longText('application_detail');
             $table->datetime('start_booking');
             $table->datetime('end_booking');
-            $table->enum('status', ['waiting', 'approved', 'refused'])->default('waiting');
+            $table->enum('status', ['waiting', 'approved', 'refused', 'cancel', 'returned'])->default('waiting');
             $table->uuid('decided_by')->nullable();
             $table->foreign('decided_by')->references('uuid')->on('users')->onDelete('set null');
+            $table->datetime('decided_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

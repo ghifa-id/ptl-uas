@@ -23,8 +23,8 @@
         <script src="https://cdn.tailwindcss.com"></script>
     @endif
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
-    integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet"
         type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.0/css/font-awesome.min.css" rel="stylesheet"
@@ -34,6 +34,14 @@
 
 <body>
     <main class="min-h-screen flex flex-col justify-center items-center px-4 bg-gray-100">
+        @if (session('warning'))
+            <div id="warning-alert"
+                class="bg-yellow-200 border border-yellow-500 text-sm text-left py-4 px-4 md:mx-0 mt-1 md:mt-0 mb-4 rounded-lg flex line-clamp-2 text-wrap w-full md:!w-80 gap-4 items-center justify-between"
+                role="alert">
+                <span>{{ session('warning') }}</span>
+                <i id="alert-close" class="fa fa-times cursor-pointer" aria-hidden="true"></i>
+            </div>
+        @endif
         @yield('content')
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
